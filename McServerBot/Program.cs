@@ -21,7 +21,7 @@ class Program
         // One of the more flexable ways to access the configuration data is to use the Microsoft's Configuration model,
         // this way we can avoid hard coding the environment secrets. I opted to use the Json and environment variable providers here.
         IConfiguration config = new ConfigurationBuilder()
-            .AddEnvironmentVariables(prefix: "DC_")
+            .AddEnvironmentVariables()
             .AddJsonFile("appsettings.json", optional: true)
             .Build();
 
@@ -34,8 +34,18 @@ class Program
         
         if (IsDebug())
             required.Add("testServer");
+
+        bool missing = false;
+        required.ForEach(x =>
+        {
+            if (config[x] == null)
+            {
+                missing = true;
+                Console.WriteLine($"Config: Missing key '{x}'");
+            }
+        });
         
-        if (config.GetChildren().Count(x => required.Contains(x.Key)) != required.Count())
+        if (missing)
             throw new Exception("Missing configuration...");
         
         API_URL = config["apiUrl"] ?? "http://localhost:8080";

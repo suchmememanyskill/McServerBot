@@ -17,5 +17,5 @@ FROM mcr.microsoft.com/dotnet/runtime:7.0
 WORKDIR /app
 COPY --from=build /app ./
 
-ENV DC_prefix=mc!
+ENV prefix=mc!
 ENTRYPOINT ["dotnet", "McServerBot.dll"]
