@@ -20,16 +20,22 @@ public class McServerService
 
     public async Task Reload()
     {
-        try
+        for (int i = 0; i < 3; i++)
         {
-            Versions = await VersionsGet.Get();
-            Maps = await MapsGet.Get();
+            try
+            {
+                Versions = await VersionsGet.Get();
+                Maps = await MapsGet.Get();
+                return;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            await Task.Delay(1000);
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            Environment.Exit(42);
-        }
+        Environment.Exit(42);
     }
 
     public async Task<StatusGet> GetStatus() => await StatusGet.Get();
