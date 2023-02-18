@@ -191,7 +191,14 @@ public class McServerSlashCommands : SlashCommandBase
                 message = "Server has been started, waiting until ready";
                 break;
             case "Ready":
-                message = $"Server is ready. Connect at ip `{Program.PUBLIC_API_URL}`";
+                string server_ip = Program.PUBLIC_API_URL;
+
+                if (server_ip.StartsWith("http://"))
+                    server_ip = server_ip.Substring(7);
+                else if (server_ip.StartsWith("https://"))
+                    server_ip = server_ip.Substring(8);
+                
+                message = $"Server is ready. Connect at ip `{server_ip}`";
                 break;
             case "Stopping":
                 message = "Server is stopping";
