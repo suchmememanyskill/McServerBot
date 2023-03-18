@@ -137,6 +137,26 @@ public class McServerService
         await Reload();
     }
 
+    public async Task ExecuteCommand(string command)
+    {
+        StatusGet status = await GetStatus();
+        
+        if (status.TextStatus is not "Ready")
+            throw new Exception("Minecraft server is not ready yet, or not running!");
+
+        await StatusCommandPost.Post(command);
+    }
+
+    public async Task KillServer()
+    {
+        StatusGet status = await GetStatus();
+        
+        if (status.TextStatus is "Stopped" or "Dead")
+            throw new Exception("Minecraft server is not running!");
+
+        await StatusKillPost.Post();
+    }
+
     private async void SetMcStatus(object? obj)
     {
         try

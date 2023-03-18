@@ -125,6 +125,21 @@ public class McServerSlashCommands : SlashCommandBase
         await me.RespondEphermeral("Deleted map");
     }
 
+    [SlashCommand("command", "Owner only. Executes a command on the server")]
+    [RequireOwner]
+    public async Task ExecCommand(string command)
+    {
+        await McServerService.ExecuteCommand(command);
+        await me.RespondEphermeral("Done");
+    }
+    
+    [SlashCommand("kill", "Kills the server, in the case it's unresponsive")]
+    public async Task KillServer()
+    {
+        await McServerService.KillServer();
+        await me.RespondEphermeral("Server Killed");
+    }
+    
     public class McMapSuggestions : AutocompleteHandler
     {
         public override async Task<AutocompletionResult> GenerateSuggestionsAsync(IInteractionContext context, IAutocompleteInteraction autocompleteInteraction,
